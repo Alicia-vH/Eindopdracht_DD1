@@ -51,7 +51,7 @@
                 </ListView.ItemTemplate>
             </ListView>
 
-            <ListView Background="White" ItemsSource="{Binding Countries}" SelectedItem="{Binding SelectedCountries}" Grid.ColumnSpan="2" Margin="418,0,0,238" Grid.RowSpan="2">
+            <ListView Background="White" ItemsSource="{Binding Countries}" SelectedItem="{Binding SelectedCountry}" Grid.ColumnSpan="2" Margin="418,0,0,238" Grid.RowSpan="2">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Grid Background="HotPink" Width="300">
@@ -78,6 +78,11 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+            
+            
+
+            <TextBlock Background="White" Text="{Binding SelectedCustomer.FName}" FontSize="14"  Grid.Column="1" HorizontalAlignment="Left" Margin="38,310,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Height="32" Width="314" />
+            <TextBlock Background="White" Text="{Binding SelectedCountry.Name}" FontSize="14"  Grid.Column="1" HorizontalAlignment="Left" Margin="436,310,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Height="74" Width="314"/>
 
         </Grid>
     </Grid>
