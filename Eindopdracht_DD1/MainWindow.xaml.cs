@@ -113,7 +113,15 @@ namespace Eindopdracht_DD1
 
         private void btAdd_Click(object sender, RoutedEventArgs e)
         {
+            
+        }
 
+        private void btAdd1_Click(object sender, RoutedEventArgs e)
+        {
+            //Start Customers
+            new CustomerWindow().Show();
+            //Close Mainwindow
+            Close();
         }
     }
 }
