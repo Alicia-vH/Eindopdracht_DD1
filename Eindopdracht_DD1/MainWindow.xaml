@@ -21,7 +21,7 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <ListView Background="White" ItemsSource="{Binding Customers}" SelectedItem="{Binding SelectedCustomer}" Grid.ColumnSpan="2" Margin="10,0,408,238" Grid.RowSpan="2">
+            <ListView Background="White" ItemsSource="{Binding Customers}" SelectedItem="{Binding SelectedCustomer}" Grid.ColumnSpan="2" Margin="10,0,408,197" Grid.RowSpan="2">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Grid Background="HotPink" Width="300">
@@ -51,7 +51,7 @@
                 </ListView.ItemTemplate>
             </ListView>
 
-            <ListView Background="White" ItemsSource="{Binding Countries}" SelectedItem="{Binding SelectedCountry}" Grid.ColumnSpan="2" Margin="418,0,0,238" Grid.RowSpan="2">
+            <ListView Background="White" ItemsSource="{Binding Countries}" SelectedItem="{Binding SelectedCountry}" Grid.ColumnSpan="2" Margin="418,0,0,197" Grid.RowSpan="2">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Grid Background="HotPink" Width="300">
@@ -78,11 +78,19 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            
-            
 
-            <TextBlock Background="White" Text="{Binding SelectedCustomer.FName}" FontSize="14"  Grid.Column="1" HorizontalAlignment="Left" Margin="38,310,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Height="32" Width="314" />
+
+
+            <TextBlock Background="White" Text="{Binding SelectedCustomer.FName}" FontSize="14"  Grid.Column="1" HorizontalAlignment="Left" Margin="0,310,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Height="32" Width="314" />
             <TextBlock Background="White" Text="{Binding SelectedCountry.Name}" FontSize="14"  Grid.Column="1" HorizontalAlignment="Left" Margin="436,310,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Height="74" Width="314"/>
+            <Label Grid.Column="1" FontSize="20" Foreground="Yellow"  Content="Customers:" HorizontalAlignment="Left" Margin="10,252,0,0" Grid.Row="1" VerticalAlignment="Top" FontWeight="Bold"/>
+            <Button Grid.Column="1" Content="x" Background="Red" Foreground="White" FontWeight="Bold" HorizontalAlignment="Left" Margin="181,260,0,0" Grid.Row="1" VerticalAlignment="Top" Width="26" Click="btRemove_Click"/>
+            <Button Grid.Column="1" Content="+" Background="Green" Foreground="White" FontWeight="Bold" HorizontalAlignment="Left" Margin="212,260,0,0" Grid.Row="1" VerticalAlignment="Top" Width="26" RenderTransformOrigin="1.915,0.473" Height="20" Click="btAdd_Click"/>
+
+            <Label Grid.Column="1" FontSize="20" Foreground="Yellow"  Content="Favourites:" HorizontalAlignment="Left" Margin="436,252,0,0" Grid.Row="1" VerticalAlignment="Top" FontWeight="Bold"/>
+            <Button Grid.Column="1" Content="x" Background="Red" Foreground="White" FontWeight="Bold" HorizontalAlignment="Left" Margin="593,260,0,0" Grid.Row="1" VerticalAlignment="Top" Width="26" RenderTransformOrigin="15.9,1.014" Click="btRemove_Click"/>
+            <Button Grid.Column="1" Content="+" Background="Green" Foreground="White" FontWeight="Bold" HorizontalAlignment="Left" Margin="624,260,0,0" Grid.Row="1" VerticalAlignment="Top" Width="26" RenderTransformOrigin="1.915,0.473" Height="20" Click="btAdd_Click"/>
+
 
         </Grid>
     </Grid>

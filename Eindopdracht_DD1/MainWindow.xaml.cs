@@ -105,5 +105,15 @@ namespace Eindopdracht_DD1
             }
         }
 
+        private void btRemove_Click(object sender, RoutedEventArgs e)
+        {
+
+
+        }
+
+        private void btAdd_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
