@@ -49,7 +49,6 @@
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
-                
             </ListView>
 
             <ListView Background="White" ItemsSource="{Binding Countries}" SelectedItem="{Binding SelectedCountries}" Grid.ColumnSpan="2" Margin="418,0,0,238" Grid.RowSpan="2">
@@ -72,13 +71,12 @@
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" Text="{Binding Name}" 
                                      Foreground="Black" FontSize="14"/>
-                                    
+
                                 </Grid>
                             </Grid>
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
-
             </ListView>
 
         </Grid>
