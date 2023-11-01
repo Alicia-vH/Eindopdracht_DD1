@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Eindopdracht_DD1"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" MinHeight="449" MaxHeight="450" MinWidth="799" MaxWidth="800">
     <Grid>
         <Grid.Background>
             <ImageBrush ImageSource="Assets/shutterstock_714405349.jpg"/>

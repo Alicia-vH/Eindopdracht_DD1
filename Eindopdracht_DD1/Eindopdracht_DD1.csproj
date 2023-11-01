@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="cf5df7e4e7804644a43be3f66a224b9d.jpg" />
     <None Remove="shutterstock_714405349.jpg" />
   </ItemGroup>
 
@@ -17,6 +18,7 @@
 
   <ItemGroup>
     <Resource Include="Assets\shutterstock_714405349.jpg" />
+    <Resource Include="cf5df7e4e7804644a43be3f66a224b9d.jpg" />
   </ItemGroup>
 
 </Project>

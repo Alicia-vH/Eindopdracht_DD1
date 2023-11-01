@@ -117,7 +117,92 @@ namespace Eindopdracht_DD1.Models
             }
             return methodResult;
         }
+
+        // CreateCustomer voegt het customer object uit de parameter toe aan de database. 
+        // Het customer object moet aan alle database eisen voldoen. De waarde van CreateCustomer:
+        // - "ok" als er geen fouten waren. 
+        // - een foutmelding (de melding geeft aan wat er fout was)
+        // - Als je bepaalde dingen niet goed invult, geeft hij een exception
+        public string CreateCustomer(Customer customer)
+        {
+            if (customer == null || string.IsNullOrEmpty(customer.FName) || string.IsNullOrEmpty(customer.LName))
+
+            {
+                throw new ArgumentException("Ongeldig argument bij gebruik van CreateCustomer");
+            }
+
+            string methodResult = "unknown";
+
+            using (MySqlConnection conn = new(_connString))
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand sql = conn.CreateCommand();
+                    sql.CommandText = @"
+               INSERT INTO customers (customerId,  FName,  LName) 
+               VALUES  (NULL,  @FName, @LName);
+            ";
+                    sql.Parameters.AddWithValue("@FName", customer.FName);
+                    sql.Parameters.AddWithValue("@LName", customer.LName);
+
+                    if (sql.ExecuteNonQuery() == 1)
+                    {
+                        methodResult = "ok";
+                    }
+                    else
+                    {
+                        methodResult = $"Klant {customer.FName + customer.LName} kon niet toegevoegd worden.";
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.Error.WriteLine(nameof(CreateCustomer));
+                    Console.Error.WriteLine(e.Message);
+                    methodResult = e.Message;
+                }
+            }
+            return methodResult;
+        }
+
+        // DeleteCustomer verwijdert het customer met de id customerId uit de database. De waarde
+        // van DeleteCustomer :
+        // - "ok" als er geen fouten waren. 
+        // - een foutmelding (de melding geeft aan wat er fout was)
+        public string DeleteCustomer(int customerId)
+        {
+            string methodResult = "unknown";
+
+            using (MySqlConnection conn = new(_connString))
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand sql = conn.CreateCommand();
+                    sql.CommandText = @"
+                DELETE 
+                FROM customers 
+                WHERE customerId = @customerId 
+            ";
+                    sql.Parameters.AddWithValue("@customerId", customerId);
+                    if (sql.ExecuteNonQuery() == 1)
+                    {
+                        methodResult = OK;
+                    }
+                    else
+                    {
+                        methodResult = $"Klant met id {customerId} kon niet verwijderd worden.";
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    Console.Error.WriteLine(nameof(DeleteCustomer));
+                    Console.Error.WriteLine(e.Message);
+                    methodResult = e.Message;
+                }
+            }
+            return methodResult;
+        }
     }
-
-
 }

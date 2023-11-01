@@ -107,8 +107,18 @@ namespace Eindopdracht_DD1
 
         private void btRemove_Click(object sender, RoutedEventArgs e)
         {
+            
+            Button btRemove = sender as Button;
+            Customer customer = btRemove.DataContext as Customer;     // Dit is het Customer in de regel met de Delete Button 
 
-
+            string resultaat = db.DeleteCustomer(customer.CustomerId);
+            if (resultaat != FavorieteLandenDb.OK)
+            {
+                MessageBox.Show(resultaat + serviceDeskBericht);
+                return;
+            }
+            PopulateCustomers();
+           
         }
 
         private void btAdd_Click(object sender, RoutedEventArgs e)

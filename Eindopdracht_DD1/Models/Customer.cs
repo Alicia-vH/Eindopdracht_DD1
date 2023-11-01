@@ -29,17 +29,17 @@ namespace Eindopdracht_DD1.Models
             set { customerId = value; OnPropertyChanged(); }
         }
 
-        private string? fName;
+        private string fName;
 
-        public string? FName
+        public string FName
         {
             get { return fName; }
             set { fName = value; OnPropertyChanged(); }
         }
 
-        private string? lName;
+        private string lName;
 
-        public string? LName
+        public string LName
         {
             get { return lName; }
             set { lName = value; OnPropertyChanged(); }

@@ -5,8 +5,28 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Eindopdracht_DD1"
         mc:Ignorable="d"
-        Title="CustomerWindow" Height="450" Width="800">
+        Title="CustomerWindow" Height="500" Width="550">
     <Grid>
-        
+        <Grid.Background>
+            <ImageBrush ImageSource="/cf5df7e4e7804644a43be3f66a224b9d.jpg"/>
+        </Grid.Background>
+
+        <Grid Margin="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Label Grid.Column="1" FontSize="15" Content="First Name:" FontWeight="Bold" HorizontalAlignment="Left" Margin="49,88,0,0" Grid.Row="1" VerticalAlignment="Top" Foreground="White" Height="44" Width="111"/>
+            <TextBox Grid.Column="1" HorizontalAlignment="Left" Margin="160,88,0,0" Grid.Row="1" VerticalAlignment="Top" Width="200" Height="25" Text="{Binding NewCustomer.FName}"/>
+            <Label Grid.Column="1" FontSize="15" FontWeight="Bold" Content="Last name:" HorizontalAlignment="Left" Margin="49,178,0,0" Grid.Row="1" VerticalAlignment="Top" Foreground="White" Height="44" Width="111" RenderTransformOrigin="0.387,2.134"/>
+            <TextBox Grid.Column="1" HorizontalAlignment="Left" Margin="160,178,0,0" Grid.Row="1" VerticalAlignment="Top" Width="200" Height="24" Text="{Binding NewCustomer.LName}"/>
+
+            <Button Grid.Column="1" Content="Save Customer" FontWeight="Bold" HorizontalAlignment="Left" Margin="160,298,0,0" Grid.Row="1" VerticalAlignment="Top" Width="200" Height="24" Click="btSave_Click"/>
+        </Grid>
+
     </Grid>
 </Window>
