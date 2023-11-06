@@ -103,7 +103,6 @@ namespace Eindopdracht_DD1
             #endregion
 
             #region Bijwerken scherm
-            new MainWindow().Show();
             Close();
             #endregion
             

@@ -15,6 +15,7 @@ namespace Eindopdracht_DD1.Models
 
         public static string OK = "ok";
         public static string NOTFOUND = "not found";
+        private string methodResult;
 
         // GetCustomers leest alle rijen in uit de databasetabel Customers en voegt deze toe aan een ICollection. 
         // Als de ICollection bij aanroep null is, volgt er een ArgumentException
@@ -67,56 +68,6 @@ namespace Eindopdracht_DD1.Models
             return methodResult;
         }
 
-        // GetCountries leest alle rijen in uit de databasetabel Countries en voegt deze toe aan een ICollection. 
-        // Als de ICollection bij aanroep null is, volgt er een ArgumentException
-        // De waarde van GetCustomers:
-        // - "ok" als er geen fouten waren. 
-        // - een foutmelding, als er wel fouten waten (mogelijk zijn niet alle countries ingelezen)
-       public string GetCountries(ICollection<Country> countries)
-        {
-            if (countries == null)
-            {
-                throw new ArgumentException("Ongeldig argument bij gebruik van GetCountries");
-            }
-
-            string methodResult = "unknown";
-
-
-            using (MySqlConnection conn = new(_connString))
-            {
-                try
-                {
-                    conn.Open();
-                    MySqlCommand sql = conn.CreateCommand();
-                    sql.CommandText = @"
-                        SELECT c.countryId, c.name
-                        FROM countries c
-                ";
-                    MySqlDataReader reader = sql.ExecuteReader();
-
-                    while (reader.Read())
-                    {
-                        Country country = new Country()
-                        {
-                            CountryId = (int)reader["countryId"],
-                            Name = (string)reader["name"],
-                           
-                        };
-
-                        countries.Add(country);
-                    }
-
-                    methodResult = "ok";
-                }
-                catch (Exception e)
-                {
-                    Console.Error.WriteLine(nameof(GetCountries));
-                    Console.Error.WriteLine(e.Message);
-                    methodResult = e.Message;
-                }
-            }
-            return methodResult;
-        }
 
         // CreateCustomer voegt het customer object uit de parameter toe aan de database. 
         // Het customer object moet aan alle database eisen voldoen. De waarde van CreateCustomer:
@@ -198,6 +149,155 @@ namespace Eindopdracht_DD1.Models
                 catch (Exception e)
                 {
                     Console.Error.WriteLine(nameof(DeleteCustomer));
+                    Console.Error.WriteLine(e.Message);
+                    methodResult = e.Message;
+                }
+            }
+            return methodResult;
+        }
+
+        // GetCountries leest alle rijen in uit de databasetabel Countries en voegt deze toe aan een ICollection. 
+        // Als de ICollection bij aanroep null is, volgt er een ArgumentException
+        // De waarde van GetCustomers:
+        // - "ok" als er geen fouten waren. 
+        // - een foutmelding, als er wel fouten waten (mogelijk zijn niet alle countries ingelezen)
+        public string GetCountries(ICollection<Country> countries)
+        {
+            if (countries == null)
+            {
+                throw new ArgumentException("Ongeldig argument bij gebruik van GetCountries");
+            }
+
+            string methodResult = "unknown";
+
+
+            using (MySqlConnection conn = new(_connString))
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand sql = conn.CreateCommand();
+                    sql.CommandText = @"
+                        SELECT c.countryId, c.name
+                        FROM countries c
+                ";
+                    MySqlDataReader reader = sql.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        Country country = new Country()
+                        {
+                            CountryId = (int)reader["countryId"],
+                            Name = (string)reader["name"],
+                           
+                        };
+
+                        countries.Add(country);
+                    }
+
+                    methodResult = "ok";
+                }
+                catch (Exception e)
+                {
+                    Console.Error.WriteLine(nameof(GetCountries));
+                    Console.Error.WriteLine(e.Message);
+                    methodResult = e.Message;
+                }
+            }
+            return methodResult;
+        }
+
+
+        // Haalt de favoriete landen op van klanten
+        public string GetFavoriteCountries(int customerId, ICollection<Favorite> favorites)
+        {
+            if (favorites == null)
+            {
+                throw new ArgumentException("Dit is niet goed ingelezen.");
+                // throw een exceptie
+            }
+
+            using (MySqlConnection conn = new(_connString))
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand sql = conn.CreateCommand();
+                    sql.CommandText = @"
+                            SELECT c.countryId, c.name
+                            FROM JOIN favorites f 
+                            INNER countries c ON c.countryId = f.CountryId
+                            WHERE f.customerId = @customerId;
+
+                             ";
+                    sql.Parameters.AddWithValue("@customerId", customerId);
+                    MySqlDataReader reader = sql.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        Favorite favorite = new()
+                        {
+                            FavoriteId = (int)reader["favoriteId"],
+                            CountryId = (int)reader["countryId"],
+                            Country = new Country()
+                            {
+                                Name = (string)reader["name"],
+                                CountryId = (int)reader["countryId"],
+                            }
+                        };
+                        favorites.Add(favorite);
+                    }
+
+                    methodResult = favorites == null ? NOTFOUND : OK;
+                }
+                catch (Exception e)
+                {
+                    Console.Error.WriteLine(nameof(GetFavoriteCountries));
+                    Console.Error.WriteLine(e.Message);
+                    methodResult = e.Message;
+                }
+            }
+
+            favorites = null;
+            return methodResult;
+        }
+
+
+        public string voegtoe(Favorite favorite)
+        {
+            if (favorite == null)
+
+            {
+                throw new ArgumentException("Ongeldig argument bij gebruik van voegtoe");
+            }
+
+            string methodResult = "unknown";
+
+            using (MySqlConnection conn = new(_connString))
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand sql = conn.CreateCommand();
+                    sql.CommandText = @"
+               INSERT INTO favorites (favoriteId,  CustomerId,  CountryId) 
+               VALUES  (NULL,  @CustomerId, @CountryId);
+            ";
+                    sql.Parameters.AddWithValue("@CustomerId", favorite.CustomerId);
+                    sql.Parameters.AddWithValue("@CountryId", favorite.CountryId);
+
+                    if (sql.ExecuteNonQuery() == 1)
+                    {
+                        methodResult = "ok";
+                    }
+                    else
+                    {
+                        methodResult = $"Klant {favorite.Customer}  {favorite.Country} kon niet toegevoegd worden.";
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.Error.WriteLine(nameof(voegtoe));
                     Console.Error.WriteLine(e.Message);
                     methodResult = e.Message;
                 }

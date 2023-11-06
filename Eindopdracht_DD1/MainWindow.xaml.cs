@@ -72,6 +72,22 @@ namespace Eindopdracht_DD1
             get { return selectedCountry; }
             set { selectedCountry = value; OnPropertyChanged(); }
         }
+
+        private ObservableCollection<Favorite> favoriteCountries = new();
+
+        public ObservableCollection<Favorite> FavoriteCountries
+        {
+            get { return favoriteCountries; }
+            set { favoriteCountries = value; OnPropertyChanged(); }
+        }
+
+        private Country? selectedFavoriteCountry;
+
+        public Country? SelectedFavoriteCountry
+        {
+            get { return selectedFavoriteCountry; }
+            set { selectedFavoriteCountry = value; OnPropertyChanged(); }
+        }
         #endregion
 
 
@@ -80,6 +96,7 @@ namespace Eindopdracht_DD1
             InitializeComponent();
             PopulateCustomers();
             PopulateCountries();
+            PopulateFavoriteCountries();
             DataContext = this;
         }
 
@@ -87,6 +104,7 @@ namespace Eindopdracht_DD1
         // Trad er een fout op bij het inlezen, wordt hiervan een melding getoond.
         private void PopulateCustomers()
         {
+            customers.Clear();
             string dbResult = db.GetCustomers(Customers);
             if (dbResult != FavorieteLandenDb.OK)
             {
@@ -105,25 +123,53 @@ namespace Eindopdracht_DD1
             }
         }
 
+        // Method zet alle favorite countries uit de database op het scherm in de control lvFavoriteCountries
+        // Trad er een fout op bij het inlezen, wordt hiervan een melding getoond.
+        private void PopulateFavoriteCountries()
+        {
+            FavoriteCountries.Clear();
+            if (SelectedCustomer == null)
+            {
+                return;
+            }
+            string dbResult = db.GetFavoriteCountries(SelectedCustomer.CustomerId, FavoriteCountries);
+            if (dbResult != FavorieteLandenDb.OK)
+            {
+                MessageBox.Show(dbResult + serviceDeskBericht);
+            }
+        }
+
         private void btRemove_Click(object sender, RoutedEventArgs e)
         {
-            
-            Button btRemove = sender as Button;
-            Customer customer = btRemove.DataContext as Customer;     // Dit is het Customer in de regel met de Delete Button 
+            if (SelectedCustomer == null)
+            {
+                MessageBox.Show("Selecteer eerst de klant die u wilt verwijderen.");
+                return;
+            }
 
-            string resultaat = db.DeleteCustomer(customer.CustomerId);
+            string resultaat = db.DeleteCustomer(SelectedCustomer.CustomerId);
             if (resultaat != FavorieteLandenDb.OK)
             {
                 MessageBox.Show(resultaat + serviceDeskBericht);
                 return;
             }
             PopulateCustomers();
-           
+
         }
 
         private void btAdd_Click(object sender, RoutedEventArgs e)
         {
-            
+            if (SelectedCustomer == null)
+            {
+                MessageBox.Show("Selecteer een klant.");
+            }
+
+            if (SelectedCountry == null)
+            {
+                MessageBox.Show("Selecteer een land.");
+            }
+            string resultaat = FavorieteLandenDb.voegtoe(customers.);
+
         }
 
         private void btAdd1_Click(object sender, RoutedEventArgs e)

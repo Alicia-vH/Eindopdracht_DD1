@@ -81,7 +81,16 @@
 
 
 
-            <TextBlock Background="White" Text="{Binding SelectedCustomer.FName}" FontSize="14"  Grid.Column="1" HorizontalAlignment="Left" Margin="0,310,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Height="32" Width="314" />
+            <TextBlock Background="White" FontSize="14"  Grid.Column="1" HorizontalAlignment="Left" Margin="0,310,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Height="32" Width="314">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}{0} {1}">
+                        <Binding Path="SelectedCustomer.FName"/>
+                        <Binding Path="SelectedCustomer.LName" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+    
+            
             <TextBlock Background="White" Text="{Binding SelectedCountry.Name}" FontSize="14"  Grid.Column="1" HorizontalAlignment="Left" Margin="436,310,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Height="74" Width="314"/>
             <Label Grid.Column="1" FontSize="20" Foreground="Yellow"  Content="Customers:" HorizontalAlignment="Left" Margin="10,252,0,0" Grid.Row="1" VerticalAlignment="Top" FontWeight="Bold"/>
             <Button Grid.Column="1" Content="x" Background="Red" Foreground="White" FontWeight="Bold" HorizontalAlignment="Left" Margin="181,260,0,0" Grid.Row="1" VerticalAlignment="Top" Width="26" Click="btRemove_Click"/>

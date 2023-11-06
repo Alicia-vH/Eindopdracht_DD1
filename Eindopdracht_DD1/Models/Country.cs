@@ -35,5 +35,6 @@ namespace Eindopdracht_DD1.Models
             get { return name; }
             set { name = value; OnPropertyChanged(); }
         }
+
     }
 }
