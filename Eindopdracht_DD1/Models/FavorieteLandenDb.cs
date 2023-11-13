@@ -15,7 +15,8 @@ namespace Eindopdracht_DD1.Models
 
         public static string OK = "ok";
         public static string NOTFOUND = "not found";
-        private string methodResult;
+        private string? methodResult;
+        private string UNKNOWN = "unknown";
 
         // GetCustomers leest alle rijen in uit de databasetabel Customers en voegt deze toe aan een ICollection. 
         // Als de ICollection bij aanroep null is, volgt er een ArgumentException
@@ -29,7 +30,7 @@ namespace Eindopdracht_DD1.Models
                 throw new ArgumentException("Ongeldig argument bij gebruik van GetCustomers");
             }
 
-            string methodResult = "unknown";
+            string methodResult = UNKNOWN;
 
 
             using (MySqlConnection conn = new(_connString))
@@ -56,7 +57,7 @@ namespace Eindopdracht_DD1.Models
                         customers.Add(customer);
                     }
 
-                    methodResult = "ok";
+                    methodResult = OK;
                 }
                 catch (Exception e)
                 {
@@ -82,7 +83,7 @@ namespace Eindopdracht_DD1.Models
                 throw new ArgumentException("Ongeldig argument bij gebruik van CreateCustomer");
             }
 
-            string methodResult = "unknown";
+            string methodResult = UNKNOWN;
 
             using (MySqlConnection conn = new(_connString))
             {
@@ -99,7 +100,7 @@ namespace Eindopdracht_DD1.Models
 
                     if (sql.ExecuteNonQuery() == 1)
                     {
-                        methodResult = "ok";
+                        methodResult = OK;
                     }
                     else
                     {
@@ -122,7 +123,7 @@ namespace Eindopdracht_DD1.Models
         // - een foutmelding (de melding geeft aan wat er fout was)
         public string DeleteCustomer(int customerId)
         {
-            string methodResult = "unknown";
+            string methodResult = UNKNOWN;
 
             using (MySqlConnection conn = new(_connString))
             {
@@ -168,7 +169,7 @@ namespace Eindopdracht_DD1.Models
                 throw new ArgumentException("Ongeldig argument bij gebruik van GetCountries");
             }
 
-            string methodResult = "unknown";
+            string methodResult = UNKNOWN;
 
 
             using (MySqlConnection conn = new(_connString))
@@ -195,7 +196,7 @@ namespace Eindopdracht_DD1.Models
                         countries.Add(country);
                     }
 
-                    methodResult = "ok";
+                    methodResult = OK;
                 }
                 catch (Exception e)
                 {
@@ -224,10 +225,10 @@ namespace Eindopdracht_DD1.Models
                     conn.Open();
                     MySqlCommand sql = conn.CreateCommand();
                     sql.CommandText = @"
-                            SELECT c.countryId, c.name
-                            FROM JOIN favorites f 
-                            INNER countries c ON c.countryId = f.CountryId
-                            WHERE f.customerId = @customerId;
+                       SELECT c.countryId, c.name, f.favoriteId
+                       FROM favorites f 
+                       INNER JOIN countries c ON c.countryId = f.CountryId
+                       WHERE f.customerId = @customerId;
 
                              ";
                     sql.Parameters.AddWithValue("@customerId", customerId);
@@ -258,7 +259,7 @@ namespace Eindopdracht_DD1.Models
                 }
             }
 
-            favorites = null;
+           // favorites = null;
             return methodResult;
         }
 
@@ -271,7 +272,7 @@ namespace Eindopdracht_DD1.Models
                 throw new ArgumentException("Ongeldig argument bij gebruik van voegtoe");
             }
 
-            string methodResult = "unknown";
+            string methodResult = UNKNOWN;
 
             using (MySqlConnection conn = new(_connString))
             {
@@ -280,19 +281,19 @@ namespace Eindopdracht_DD1.Models
                     conn.Open();
                     MySqlCommand sql = conn.CreateCommand();
                     sql.CommandText = @"
-               INSERT INTO favorites (favoriteId,  CustomerId,  CountryId) 
-               VALUES  (NULL,  @CustomerId, @CountryId);
+                       INSERT INTO favorites (favoriteId,  CustomerId,  CountryId) 
+                       VALUES  (NULL,  @CustomerId, @CountryId);
             ";
                     sql.Parameters.AddWithValue("@CustomerId", favorite.CustomerId);
                     sql.Parameters.AddWithValue("@CountryId", favorite.CountryId);
 
                     if (sql.ExecuteNonQuery() == 1)
                     {
-                        methodResult = "ok";
+                        methodResult = OK;
                     }
                     else
                     {
-                        methodResult = $"Klant {favorite.Customer}  {favorite.Country} kon niet toegevoegd worden.";
+                        methodResult = $"Land {favorite.Customer}  {favorite.Country} kon niet toegevoegd worden.";
                     }
                 }
                 catch (Exception e)
@@ -304,5 +305,46 @@ namespace Eindopdracht_DD1.Models
             }
             return methodResult;
         }
+
+        // DeleteFavCountry verwijdert het land met de id bij favorites countryId uit de database. De waarde
+        // van DeleteFavCountry :
+        // - "ok" als er geen fouten waren. 
+        // - een foutmelding (de melding geeft aan wat er fout was)
+        public string DeleteFavCountry(int CountryId)
+        {
+            string methodResult = UNKNOWN;
+
+            using (MySqlConnection conn = new(_connString))
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand sql = conn.CreateCommand();
+                    sql.CommandText = @"
+                DELETE 
+                FROM favorites 
+                WHERE CountryId = @CountryId 
+            ";
+                    sql.Parameters.AddWithValue("@CountryId", CountryId);
+                    if (sql.ExecuteNonQuery() == 1)
+                    {
+                        methodResult = OK;
+                    }
+                    else
+                    {
+                        methodResult = $"Land met id {CountryId} kon niet verwijderd worden.";
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    Console.Error.WriteLine(nameof(DeleteFavCountry));
+                    Console.Error.WriteLine(e.Message);
+                    methodResult = e.Message;
+                }
+            }
+            return methodResult;
+        }
+
     }
 }

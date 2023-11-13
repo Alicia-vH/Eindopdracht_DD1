@@ -54,7 +54,12 @@ namespace Eindopdracht_DD1
         public Customer? SelectedCustomer
         {
             get { return selectedCustomer; }
-            set { selectedCustomer = value; OnPropertyChanged(); }
+            set 
+            {
+                selectedCustomer = value; 
+                OnPropertyChanged();
+                PopulateFavoriteCountries();
+            }
         }
 
         private ObservableCollection<Country> countries = new();
@@ -81,9 +86,9 @@ namespace Eindopdracht_DD1
             set { favoriteCountries = value; OnPropertyChanged(); }
         }
 
-        private Country? selectedFavoriteCountry;
+        private Favorite? selectedFavoriteCountry;
 
-        public Country? SelectedFavoriteCountry
+        public Favorite? SelectedFavoriteCountry
         {
             get { return selectedFavoriteCountry; }
             set { selectedFavoriteCountry = value; OnPropertyChanged(); }
@@ -168,7 +173,20 @@ namespace Eindopdracht_DD1
             {
                 MessageBox.Show("Selecteer een land.");
             }
-            string resultaat = FavorieteLandenDb.voegtoe(customers.);
+            Favorite fav = new Favorite()
+            {
+                CountryId = selectedCountry.CountryId,
+                CustomerId = selectedCustomer.CustomerId,
+                Country = selectedCountry,
+                Customer = selectedCustomer
+            };
+            string resultaat = db.voegtoe(fav);
+            if (resultaat != FavorieteLandenDb.OK)
+            {
+                MessageBox.Show(resultaat + serviceDeskBericht);
+                return;
+            }
+            PopulateFavoriteCountries();
 
         }
 
@@ -176,8 +194,26 @@ namespace Eindopdracht_DD1
         {
             //Start Customers
             new CustomerWindow().Show();
-            //Close Mainwindow
+            //Sluit Mainwindow
             Close();
+        }
+
+        private void btRemove1_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedFavoriteCountry == null)
+            {
+                MessageBox.Show("Selecteer eerst het land die u wilt verwijderen.");
+                return;
+            }
+
+            string resultaat = db.DeleteFavCountry(SelectedFavoriteCountry.CountryId);
+            if (resultaat != FavorieteLandenDb.OK)
+            {
+                MessageBox.Show(resultaat + serviceDeskBericht);
+                return;
+            }
+            PopulateFavoriteCountries();
+
         }
     }
 }
